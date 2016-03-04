@@ -1,0 +1,120 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  
+  <parent>
+    <groupId>com.dan.exercise</groupId>
+    <artifactId>maven</artifactId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
+
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.dan.exercise</groupId>
+  <artifactId>app</artifactId>
+  <packaging>jar</packaging>
+  <version>1.0</version>
+  <name>app</name>
+  <url>http://maven.apache.org</url>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.dan.exercise</groupId>
+      <artifactId>model</artifactId>
+      <version>1.0</version>
+    </dependency>
+  </dependencies>
+
+  
+  <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+        <includes>
+          <include>**/config.properties</include>  
+        </includes>
+      </resource>
+    </resources>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifest>
+              <mainClass>com.dan.exercise.app.Main</mainClass>
+            </manifest>
+          </archive>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+<!-- profiles -->
+<profiles>
+   <profile>
+     <id>copy-beside</id>
+     <activation>
+      <activeByDefault>true</activeByDefault>
+     </activation>
+     <properties>
+      <path>${project.build.directory}/textFile</path>
+      </properties>
+     <build>
+       <plugins>
+         <plugin>
+           <artifactId>maven-antrun-plugin</artifactId>
+           <executions>
+             <execution>
+               <phase>compile</phase>
+               <goals>
+                 <goal>run</goal>
+               </goals>
+               <configuration>
+                 <tasks>
+                   <copy file="src/main/resources/textFile"
+                         tofile="${project.build.directory}/textFile"/>
+                 </tasks>
+               </configuration>
+             </execution>
+           </executions>
+         </plugin>
+       </plugins>
+     </build>
+   </profile>
+   <profile>
+     <id>copy-to-home</id>
+     <properties>
+      <path>/home/${user.name}/textFile</path>
+      </properties>
+     <build>
+       <plugins>
+         <plugin>
+           <artifactId>maven-antrun-plugin</artifactId>
+           <executions>
+             <execution>
+               <phase>compile</phase>
+               <goals>
+                 <goal>run</goal>
+               </goals>
+               <configuration>
+                 <tasks>
+                   <copy file="src/main/resources/textFile"
+                         tofile="/home/${user.name}/textFile"/>
+                 </tasks>
+               </configuration>
+             </execution>
+           </executions>
+         </plugin>
+       </plugins>
+     </build>
+   </profile>
+
+ </profiles>
+
+<!-- test -->
+
+</project>
